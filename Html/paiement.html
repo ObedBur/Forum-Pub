@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paiement — Forum Scientifique Digital Kivu</title>
+
+  <!-- Flutterwave -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="font-sans bg-gradient-to-b from-white to-gray-50 text-gray-900 antialiased"> 
+  <!-- HEADER -->
+  <header class="bg-white/70 backdrop-blur sticky top-0 z-50 border-b">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3" aria-label="Accueil">
+        <img src="../assets/img/forumlogo.png" alt="Logo Forum Digital Kivu" class="w-10 h-10 rounded-full object-cover shadow" />
+        <span class="text-lg font-extrabold">
+          Digital Kivu – <span class="text-primary">Soko</span> Master Class
+        </span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm" aria-label="Navigation principale">
+        <a href="../index.html#infos" class="hover:text-primary">Infos</a>
+        <a href="programme.html" class="hover:text-primary">Programme</a>
+        <a href="paiement.html" class="text-primary font-semibold">Paiement</a>
+        <a href="contact.html" class="hover:text-primary">Contact</a>
+        <a href="inscription.html" class="ml-4 inline-flex items-center gap-2 btn-primary-hero">S'inscrire</a>
+      </nav>
+      <div class="md:hidden">
+        <button id="mobileOpen" class="p-2 rounded-md bg-gray-100" aria-label="Ouvrir le menu mobile">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-4xl mx-auto px-4 py-16">
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- INFOS -->
+      <div class="bg-white rounded-2xl p-8 shadow-lg">
+        <h2 class="text-2xl font-bold">Vérifier vos informations</h2>
+        <p class="text-sm text-gray-600 mt-2">
+          Nous utilisons votre <strong>nom</strong>, <strong>e-mail</strong> et <strong>téléphone</strong> pour émettre le reçu.
+        </p>
+        <div id="recapInfos" class="mt-4 space-y-2 text-sm text-gray-700" aria-live="polite"></div>
+      </div>
+
+      <!-- PAIEMENT -->
+      <div class="bg-white rounded-2xl p-8 shadow-lg">
+        <h2 class="text-2xl font-bold">Procéder au paiement</h2>
+        <p class="text-sm text-gray-600 mt-2">Montant : <strong>25 USD</strong></p>
+        <div class="mt-6">
+          <button id="btnPay" class="btn-primary w-full inline-flex justify-center items-center gap-2">
+            💳 Payer maintenant
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-3">Options: cartes, M-Pesa, Mobile Money...</p>
+
+        <!-- REÇU -->
+        <div id="receipt" class="hidden mt-6 bg-gray-50 p-4 rounded-lg border">
+          <h3 class="font-semibold">✅ Reçu de paiement</h3>
+          <pre id="receiptJson" class="text-xs mt-3 overflow-auto"></pre>
+          <div class="mt-4 flex gap-3">
+            <button id="btnPrint" class="px-4 py-2 border rounded-md">🖨️ Imprimer</button>
+            <button id="btnNew" class="px-4 py-2 border rounded-md">🔄 Nouvelle inscription</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-gray-300">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between">
+      <div class="text-sm">© 2025 Forum Scientifique Digital Kivu — Tous droits réservés.</div>
+      <div class="mt-3 md:mt-0 text-sm">Conçu par l'équipe du Forum</div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Données fictives (à remplacer par celles du formulaire)
+    const userData = {
+      name: "Participant Test",
+      email: "participant@mail.com",
+      phone: "+243900000000"
+    };
+
+    // Afficher les infos de l'utilisateur
+    document.getElementById("recapInfos").innerHTML = `
+      <p><strong>Nom:</strong> ${userData.name}</p>
+      <p><strong>Email:</strong> ${userData.email}</p>
+      <p><strong>Téléphone:</strong> ${userData.phone}</p>
+    `;
+
+    // Paiement Flutterwave
+    document.getElementById("btnPay").addEventListener("click", function () {
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK_TEST-xxxxxxxxxxxxxxxxxxxxx", // ⚠️ remplace avec ta vraie clé publique
+        tx_ref: "txn_" + Date.now(),
+        amount: 25,
+        currency: "USD",
+        payment_options: "card,mobilemoney,mpesa",
+        customer: {
+          email: userData.email,
+          phone_number: userData.phone,
+          name: userData.name,
+        },
+        callback: function (data) {
+          // Afficher reçu
+          document.getElementById("receipt").classList.remove("hidden");
+          document.getElementById("receiptJson").textContent = JSON.stringify(data, null, 2);
+        },
+        customizations: {
+          title: "Forum Digital Kivu",
+          description: "Paiement Master Class",
+          logo: "../assets/img/forumlogo.png",
+        },
+      });
+    });
+
+    // Impression
+    document.getElementById("btnPrint").addEventListener("click", () => window.print());
+
+    // Nouvelle inscription
+    document.getElementById("btnNew").addEventListener("click", () => window.location.href = "inscription.html");
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programme — Forum Scientifique Digital Kivu</title>
+
+  <!-- Flutterwave Checkout v3 -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="font-sans bg-white-antialiased leading-relaxed text-gray-900">
+  <header id="siteHeader" class="bg-white/60 backdrop-blur sticky top-0 z-50 border-b header-transparent header-compact">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3">
+        <img src="../assets/img/forumlogo.png" alt="Logo" class="w-10 h-10 rounded-full object-cover shadow" />
+        <span class="text-lg font-extrabold">Digital Kivu – <span class="text-primary">Soko</span> Master Class</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm" id="mainNav">
+        <a href="../index.html#infos" class="hover:text-primary nav-link">Infos</a>
+        <a href="programme.html" class="hover:text-primary nav-link">Programme</a>
+        <a href="paiement.html" class="hover:text-primary nav-link">Paiement</a>
+        <a href="contact.html" class="hover:text-primary nav-link">Contact</a>
+        <a href="inscription.html" class="ml-4 inline-flex items-center gap-2 btn-primary-hero">S'inscrire</a>
+      </nav>
+
+      <div class="md:hidden">
+        <button id="mobileOpen" class="p-2 rounded-md bg-gray-100"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page hero -->
+  <section class="py-8 bg-gradient-to-r from-primary to-accent text-white">
+    <div class="max-w-6xl mx-auto px-4 py-8 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold">Programme du Forum Scientifique Digital Kivu</h1>
+      <p class="mt-3 opacity-90">17 – 19 Octobre 2025 • Salle de conférence ISIG‑Goma</p>
+      <div class="mt-3">
+        <a href="inscription.html" class="btn-gold mr-3">S'inscrire</a>
+        <a href="#programmeContainer" class="btn-secondary-hero">Voir le déroulement</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="py-8 bg-gray-50">
+    <div id="programmeContainer" class="max-w-5xl mx-auto px-4">
+      <div class="text-center py-8">
+        <svg class="animate-spin h-8 w-8 mx-auto text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+        <div class="mt-3 text-sm text-gray-600">Chargement du programme…</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function loadProgrammePartial() {
+      try {
+        const res = await fetch('../partials/programme-timeline.html');
+        if (!res.ok) throw new Error('Failed to load');
+        const html = await res.text();
+        document.getElementById('programmeContainer').innerHTML = html;
+        // Evaluate any scripts inside the fetched partial
+        document.querySelectorAll('#programmeContainer script').forEach(s => {
+          const el = document.createElement('script');
+          if (s.src) { el.src = s.src; } else { el.textContent = s.textContent; }
+          document.body.appendChild(el);
+        });
+        // set lazy loading for images inside partial
+        document.querySelectorAll('#programmeContainer img').forEach(img=>{ img.loading='lazy'; });
+      } catch (err) {
+        document.getElementById('programmeContainer').innerHTML = '<div class="text-red-500">Erreur de chargement du programme.</div>';
+        console.error(err);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', loadProgrammePartial);
+  </script>
+
+  <footer class="bg-gray-900 text-gray-300 py-8">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+      <p class="text-sm">© 2025 Forum Scientifique Digital Kivu — Tous droits réservés.</p>
+      <div class="text-sm opacity-80 mt-3 md:mt-0">Conçu par l'équipe du Forum</div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js" defer></script>
+</body>
+</html> 
