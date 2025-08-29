@@ -275,10 +275,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainNav = document.getElementById('mainNav');
     let navEl;
     if (mainNav) {
+      // Clone and normalize the nav to match index.html appearance
       navEl = mainNav.cloneNode(true);
       navEl.classList.remove('hidden');
-      navEl.classList.add('flex', 'flex-col', 'mt-8');
-      navEl.querySelectorAll('a').forEach(a => { a.classList.add('block', 'mt-4'); });
+      navEl.classList.add('flex', 'flex-col', 'mt-8', 'items-start', 'gap-3', 'px-2');
+
+      // Normalize each link and identify the signup CTA
+      const anchors = Array.from(navEl.querySelectorAll('a'));
+      anchors.forEach(a => {
+        // Remove any inline layout classes from desktop nav
+        a.classList.remove('ml-4', 'inline-flex', 'items-center', 'gap-2');
+        // Ensure block-level link with consistent sizing
+        a.classList.add('block', 'w-full', 'text-left', 'mt-3', 'text-lg', 'font-medium', 'text-white', 'px-2');
+      });
+
+      // Find the signup CTA and promote it to the top of the drawer
+      const signup = anchors.find(a => {
+        const txt = (a.textContent || '').trim().toLowerCase();
+        return txt.includes("s'inscrire") || txt.includes('s inscrire') || a.classList.contains('btn-primary-hero') || a.classList.contains('btn-gold');
+      });
+      if (signup) {
+        // Ensure CTA styling matches index
+        signup.className = 'block w-full btn-gold text-center py-3 mb-4';
+        // Move to top
+        navEl.removeChild(signup);
+        navEl.insertBefore(signup, navEl.firstChild);
+      }
     } else {
       navEl = document.createElement('nav');
       navEl.className = 'mt-8';

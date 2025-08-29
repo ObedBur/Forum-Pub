@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="../css/style.css">
@@ -19,6 +20,11 @@
 <body class="font-sans bg-gradient-to-b from-white to-gray-50 text-gray-900 antialiased"> 
   <!-- HEADER -->
   <header class="bg-white/70 backdrop-blur sticky top-0 z-50 border-b">
+    <div class="md:hidden">
+      <button id="mobileOpen" class="p-2 rounded-md bg-gray-100" aria-label="Ouvrir le menu mobile">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="../index.html" class="flex items-center gap-3" aria-label="Accueil">
         <img src="../assets/img/forumlogo.png" alt="Logo Forum Digital Kivu" class="w-10 h-10 rounded-full object-cover shadow" />
@@ -33,11 +39,7 @@
         <a href="contact.html" class="hover:text-primary">Contact</a>
         <a href="inscription.html" class="ml-4 inline-flex items-center gap-2 btn-primary-hero">S'inscrire</a>
       </nav>
-      <div class="md:hidden">
-        <button id="mobileOpen" class="p-2 rounded-md bg-gray-100" aria-label="Ouvrir le menu mobile">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
+      
     </div>
   </header>
 
